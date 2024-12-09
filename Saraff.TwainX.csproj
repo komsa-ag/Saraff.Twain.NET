@@ -5,10 +5,10 @@
     <PackageId>Saraff.Twain</PackageId>
     <Company>SARAFF SOFTWARE</Company>
     <Product>Saraff.Twain</Product>
-    <AssemblyVersion>1.0.32.732</AssemblyVersion>
-    <FileVersion>1.0.32.732</FileVersion>
+    <AssemblyVersion>1.0.33.756</AssemblyVersion>
+    <FileVersion>1.0.33.756</FileVersion>
     <Authors>Copyright © SARAFF 2011</Authors>
-    <Version>1.0.32.732</Version>
+    <Version>1.0.33.756</Version>
     <Description>Allows you to control work of flatbed scanner, web and digital camera and any other TWAIN device from .NET environment. You can use this library in your programs written in any programming languages compatible with .NET technology.</Description>
     <PackageProjectUrl>https://github.com/saraff-9EB1047A4BEB4cef8506B29BA325BD5A/Saraff.Twain.NET/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/saraff-9EB1047A4BEB4cef8506B29BA325BD5A/Saraff.Twain.NET.git</RepositoryUrl>
@@ -22,6 +22,7 @@
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <AssemblyName>Saraff.Twain</AssemblyName>
     <RootNamespace>Saraff.Twain</RootNamespace>
+    <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
 
   <ItemGroup>

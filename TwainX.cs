@@ -235,11 +235,12 @@ namespace Saraff.Twain {
                 TwUserInterface _guif = new TwUserInterface() {
                     ShowUI = this.ShowUI,
                     ModalUI = this.ModalUI,
-                    ParentHand = IntPtr.Zero
+                    ParentHand = this.Parent
                 };
                 for(TwRC _rc = this._dsmEntry.DsInvoke(this._AppId, this._srcds, TwDG.Control, TwDAT.UserInterface, TwMSG.EnableDS, ref _guif); _rc != TwRC.Success;) {
                     throw new TwainException(this._GetTwainStatus(), _rc);
                 }
+                this.ModalUI = _guif.ModalUI;
                 if((this._TwainState & TwainStateFlag.DSReady) != 0) {
                     this._TwainState &= ~TwainStateFlag.DSReady;
                 } else {
@@ -533,7 +534,19 @@ namespace Saraff.Twain {
 
         [Category("Behavior")]
         [DefaultValue(false)]
-        private bool ModalUI { get; set; }
+        public bool ModalUI { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent window for the TWAIN source.
+        /// <para xml:lang="ru">Возвращает или устанавливает родительское окно для TWAIN-источника.</para>
+        /// </summary>
+        /// <value>
+        /// Окно.
+        /// </value>
+        [Category("Behavior")]
+        [DefaultValue(false)]
+        [Description("Gets or sets the parent window for the TWAIN source. Возвращает или устанавливает родительское окно для TWAIN-источника.")]
+        public IntPtr Parent { get; set; }
 
         /// <summary>
         /// Возвращает или устанавливает используемый приложением язык. Get or set the primary language for your application.
