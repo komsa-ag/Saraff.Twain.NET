@@ -270,6 +270,7 @@ namespace Saraff.Twain {
                 for(TwRC _rc = this._dsmEntry.DsInvoke(this._AppId, this._srcds, TwDG.Control, TwDAT.UserInterface, TwMSG.EnableDS, ref _guif); _rc != TwRC.Success;) {
                     throw new TwainException(this._GetTwainStatus(), _rc);
                 }
+                this.ModalUI = _guif.ModalUI;
                 if((this._TwainState & TwainStateFlag.DSReady) != 0) {
                     this._TwainState &= ~TwainStateFlag.DSReady;
                 } else {
@@ -636,7 +637,7 @@ namespace Saraff.Twain {
 
         [Category("Behavior")]
         [DefaultValue(false)]
-        private bool ModalUI { get; set; }
+        public bool ModalUI { get; set; }
 
         /// <summary>
         /// Gets or sets the parent window for the TWAIN source.

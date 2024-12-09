@@ -30,7 +30,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Saraff.Twain.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -99,7 +100,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF "$(ConfigurationName)"=="Release" (
-    rem nuget pack "$(ProjectPath)" -Prop Configuration=Release -OutputDirectory "$(SolutionDir)nuget-packages"
+    nuget pack "$(ProjectPath)" -Prop Configuration=Release -OutputDirectory "$(SolutionDir)nuget-packages" -Symbols -SymbolPackageFormat snupkg
 )</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
