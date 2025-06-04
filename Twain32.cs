@@ -1,4 +1,4 @@
-﻿/* Этот файл является частью библиотеки Saraff.Twain.NET
+/* Этот файл является частью библиотеки Saraff.Twain.NET
  * © SARAFF SOFTWARE (Кирножицкий Андрей), 2011.
  * Saraff.Twain.NET - свободная программа: вы можете перераспространять ее и/или
  * изменять ее на условиях Меньшей Стандартной общественной лицензии GNU в том виде,
@@ -38,6 +38,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Reflection;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.IO;
 
@@ -66,6 +67,7 @@ namespace Saraff.Twain {
         private bool _isTwain2Enable = IntPtr.Size != 4 || Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX;
         private CallBackProc _callbackProc;
         private TwainCapabilities _capabilities;
+        private bool _useMemoryRawDataConvert;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Twain32"/> class.
@@ -278,6 +280,15 @@ namespace Saraff.Twain {
                 }
             }
             return (this._TwainState & TwainStateFlag.DSEnabled) != 0;
+        }
+
+        /// <summary>
+        /// Enable convert raw data to stream option in MemoryTransferPictures
+        /// without using MemXferEvent
+        /// </summary>
+        /// <param name="enabled">Is active</param>
+        public void SetMemoryRawDataConvertOption(bool enabled) {
+            this._useMemoryRawDataConvert = enabled;
         }
 
         /// <summary>
@@ -1181,7 +1192,11 @@ namespace Saraff.Twain {
                                 TwRC _rc2 = this._dsmEntry.DsInvoke(this._AppId, this._srcds, TwDG.Control, TwDAT.PendingXfers, TwMSG.EndXfer, ref _pxfr);
                                 throw new TwainException(_cc, _rc);
                             }
-                            if(this._OnMemXfer(new MemXferEventArgs(_info, ImageMemXfer.Create(_memXferBuf)))) {
+                            ImageMemXfer _imageMemXfer = ImageMemXfer.Create(_memXferBuf);
+                            if(this._useMemoryRawDataConvert) {
+                                this._ConvertRawDataToTwainImageStream(_imageMemXfer.ImageData, _info);
+                            }
+                            if(this._OnMemXfer(new MemXferEventArgs(_info, _imageMemXfer))) {
                                 return;
                             }
                             if(_rc == TwRC.XferDone) {
@@ -1487,6 +1502,35 @@ namespace Saraff.Twain {
             } finally {
                 Marshal.FreeHGlobal(_extImageInfo);
             }
+        }
+
+        private void _ConvertRawDataToTwainImageStream(byte[] rawData, ImageInfo info) {
+            PixelFormat format = info.BitsPerPixel switch
+            {
+                1 => PixelFormat.Format1bppIndexed,
+                8 => PixelFormat.Format8bppIndexed,
+                24 => PixelFormat.Format24bppRgb,
+                32 => PixelFormat.Format32bppArgb,
+                _ => throw new NotSupportedException("Unsupported bit depth: " + info.BitsPerPixel)
+            };
+
+            using Bitmap bmp = new(info.ImageWidth, info.ImageLength, format);
+            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, info.ImageWidth, info.ImageLength), ImageLockMode.WriteOnly, format);
+
+            Marshal.Copy(rawData, 0, bmpData.Scan0, rawData.Length);
+            bmp.UnlockBits(bmpData);
+
+            Stream stream = _ImageToStream(bmp);
+            this._images.Add(stream);
+        }
+
+        private static MemoryStream _ImageToStream(Image image, string mimeType = "image/png") {
+            ImageCodecInfo? encoder = ImageCodecInfo.GetImageEncoders().FirstOrDefault(c => c.MimeType == mimeType)
+              ?? throw new InvalidOperationException("Encoder not found for: " + mimeType);
+            MemoryStream memoryStream = new();
+            image.Save(memoryStream, encoder, null);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
         /// <summary>
