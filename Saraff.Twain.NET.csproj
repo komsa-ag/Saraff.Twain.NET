@@ -6,8 +6,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>sign.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>Saraff.Twain</AssemblyName>
     <RootNamespace>Saraff.Twain</RootNamespace>
     <Title>Saraff.Twain.NET</Title>
