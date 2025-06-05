@@ -13,9 +13,9 @@
     <Company>SARAFF SOFTWARE</Company>
     <Product>Saraff.Twain.NET</Product>
     <Copyright>Copyright © SARAFF 2011</Copyright>
-    <AssemblyVersion>1.0.33.756</AssemblyVersion>
-    <FileVersion>1.0.33.756</FileVersion>
-    <Version>1.0.33.756</Version>
+    <AssemblyVersion>1.0.33.757</AssemblyVersion>
+    <FileVersion>1.0.33.757</FileVersion>
+    <Version>1.0.33.757</Version>
     <PackageProjectUrl>https://github.com/saraff-9EB1047A4BEB4cef8506B29BA325BD5A/Saraff.Twain.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/saraff-9EB1047A4BEB4cef8506B29BA325BD5A/Saraff.Twain.NET.git</RepositoryUrl>
     <PackageTags>TWAIN TWAIN.NET C# .NET FREE Open Source OSS Toolkit WPF x64 scan .NETCore</PackageTags>
